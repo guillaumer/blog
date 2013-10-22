@@ -1,0 +1,23 @@
+<?php
+/**
+ * Partial render for post editing in admin
+ *
+ * @author g.raoult@gmail.com
+ */
+$article = $this->article_resume;
+?>
+<div id="article_actions">
+    <a href="./edit-article/<?php echo $article->article_id ?>"><img src="<?php echo $this->baseUrl().'/images/btn_modifier_articles.png' ?>" alt="Modifier"/></a>
+    <a href="./supprimer-article/<?php echo $article->article_id ?>" class="btn_supprimer"><img src="<?php echo $this->baseUrl().'/images/btn_suppr_articles.png' ?>" alt="Supprimer"/></a>
+</div>
+<h2>
+    <?php if($article->article_featured == 1) echo '<img src="'.$this->baseUrl().'/images/star_icon.png" alt="article important">'; ?>
+    <?php echo $article->article_title; ?>
+</h2>
+<div id="article_infos">
+    <?php echo 'Ecrit par ',$article->user_username,' le ',$article->article_date; ?>
+</div>
+<div id="article_contenu">
+    <?php echo $article->article_extract; ?>
+</div>
+

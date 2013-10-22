@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * Editing a post
+ *
+ * @author g.raoult@gmail.com
+ */
+
+$this->title = 'Administration - Modifier un article';
+echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/jquery-ui-1.8.10.custom.css');
+$this->headTitle($this->title);
+?>
+<div id="dashboard_content">
+    <?php
+    if($this->message != '') echo '<p>',$this->message,'</p>';
+    echo '<h2 class="titre_form_article"><img src="'.$this->baseUrl().'/images/titre_modifier_article.png" alt="Modifier un article"/></h2>';
+    $form = $this->formEdit;
+    // Remove <dt> from label generation
+    foreach ($form->getElements() as $element) {
+        $element->getDecorator('label');
+    }
+    echo '<form class="article_action" method="'.$form->getMethod().'" action="'.$form->getAction().'" name="'.$form->getName().'">';
+    echo '<div class="element">';
+        echo $form->titre->renderErrors() . $form->titre->renderViewHelper();
+        echo '<div id="permalink"><h3>Lien permanent : </h3>&nbsp;'.$_SERVER['HTTP_HOST'].$this->baseUrl().'/<span id="'.$this->article_id.'" class="article_name_edit">'.$this->article_name.'</span></div>';
+        echo '<h3>Extrait de l\'article</h3>';
+        echo $form->extrait->renderErrors() . $form->extrait->renderViewHelper();
+        echo '<h3>Contenu de l\'article</h3>';
+        echo $form->contenu->renderErrors() . $form->contenu->renderViewHelper();
+    echo '</div>';
+    echo '<div class="params">';
+        echo'<h2 class="titre_sidebar">Paramètres</h2>';
+            echo '<div id="param_general">';
+                echo '<div>Auteur : <span class="param_value" id="author_value">';
+                    echo $form->author->getValue();
+                echo '</span><a class="lien_modif" href="#" id="author_modif"><img src="'.$this->baseUrl().'/images/icon_pen.png" alt="Modifier"/></a><div id="author_select">'.$form->author->render().'<a href="#" id="author_ok"><img src="'.$this->baseUrl().'/images/icon_valid_admin.png" alt="Ok"/></a></div></div>';
+                /*Début etat*/
+                echo '<div>Etat : <span class="param_value" id="etat_value">';
+                    if($form->status->getValue() == 0){
+                        echo 'Brouillon';
+                    }else{
+                        echo 'Publié';
+                    }
+                echo '</span><a class="lien_modif" href="#" id="etat_modif"><img src="'.$this->baseUrl().'/images/icon_pen.png" alt="Modifier"/></a><div id="etat_select">'.$form->status->render().'<a href="#" id="etat_ok"><img src="'.$this->baseUrl().'/images/icon_valid_admin.png" alt="Ok"/></a></div></div>';
+                /*Fin etat*/
+                
+                /*Début type*/
+                echo '<div>Type : <span class="param_value" id="type_value">';
+                    if($form->type->getValue() == 0){
+                        echo 'Post';
+                    }else{
+                        echo 'Page';
+                    }
+                echo '</span><a class="lien_modif" href="#" id="type_modif"><img src="'.$this->baseUrl().'/images/icon_pen.png" alt="Modifier"/></a><div id="type_select">'.$form->type->render().'<a href="#" id="type_ok"><img src="'.$this->baseUrl().'/images/icon_valid_admin.png" alt="Ok"/></a></div></div>';
+                /*Fin type*/
+                
+                /*Début featured*/
+                echo '<div>Article mis en avant : <span class="param_value" id="featured_value">';
+                    if ($form->featured->getValue() == 0){
+                        echo 'Non';
+                    } else{
+                        echo 'Oui';
+                    }
+                echo '</span><a class="lien_modif" href="#" id="featured_modif"><img src="'.$this->baseUrl().'/images/icon_pen.png" alt="Modifier"/></a><div id="featured_select">'.$form->featured->render().'<a href="#" id="featured_ok"><img src="'.$this->baseUrl().'/images/icon_valid_admin.png" alt="Ok"/></a></div></div>';
+                /*Fin featured*/
+                
+                echo '<div>Date de publication : <span class="param_value">'.$form->pdate->getValue().'</span>
+                    '.$form->pdate->render().'</div>';
+                echo '<div>Dernière modification : <span class="param_value">'.$form->mdate->getValue().'</span>
+                    '.$form->mdate->render().'</div>';
+            echo $form->submit->render();
+            echo '<p><a id="cancel_article" href="'.$this->url(array(),'admin-articles',true).'">Annuler</a></p>';
+            echo '<p class="clear"></p></div>';
+        echo'<h2 class="titre_sidebar">Mots Clés</h2>';
+        echo '<div id="tags_general">';
+            echo $form->tags->render();
+            /*if(isset($form->existing_tags)){
+                echo $form->existing_tags->render();
+            }*/
+        echo '</div>';
+    echo '</div>';
+    echo '<div class="clear"></div></form>';
+    
+
+$this->inlineScript()->appendFile($this->baseUrl().'/js/tiny_mce/tiny_mce.js', $type = 'text/javascript');
+$this->inlineScript()->appendFile($this->baseUrl().'/js/tiny_mce/init.js', $type = 'text/javascript');
+$this->headScript()->appendFile($this->baseUrl().'/js/jquery.jeditable.min.js', $type = 'text/javascript');
+$this->headScript()->appendFile($this->baseUrl().'/js/jquery-ui-1.8.10.custom.min.js', $type = 'text/javascript');
+$this->headScript()->appendFile($this->baseUrl().'/js/jquery.ui.datepicker-fr.js', $type = 'text/javascript');
+$this->inlineScript()->appendFile($this->baseUrl().'/js/edit_article.js', $type = 'text/javascript');
+$this->inlineScript()->appendFile($this->baseUrl().'/js/new_article.js', $type = 'text/javascript');
+
+echo $this->inlineScript();
+
+?>
+</div>

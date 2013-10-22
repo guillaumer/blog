@@ -1,0 +1,137 @@
+<?php
+
+/**
+ * Main admin view
+ *
+ * @author g.raoult@gmail.com
+ */
+
+    $this->title = 'Administration - Dashboard';
+    $this->headTitle($this->title);
+    $this->headScript()->appendFile($this->baseUrl().'/js/jquery.pajinate.min.js', $type = 'text/javascript');
+    $this->headScript()->appendFile($this->baseUrl().'/js/jquery.jeditable.min.js', $type = 'text/javascript');
+    $this->headScript()->appendFile($this->baseUrl().'/js/jquery-ui-1.8.9.custom.min.js', $type = 'text/javascript');
+    $this->headScript()->appendFile($this->baseUrl().'/js/dashboard.init.js', $type = 'text/javascript');
+?>
+<div id="dashboard_content">
+    <div id="quick_access">
+        <ul id="quick_content">
+            <li><?php echo '<a id="new_article" href="'.$this->url(array('controller'=>'admin', 'action'=>'new-article')).'">Nouvel article</a>'; ?></li>
+            <li><?php echo '<a id="users" href="'.$this->url(array('controller'=>'admin', 'action'=>'users')).'">Utilisateurs</a>'; ?></li>
+            <li><?php echo '<a id="pictures" href="'.$this->url(array('controller'=>'admin', 'action'=>'files')).'">Images</a>'; ?></li>
+            <li><?php echo '<a id="params" href="'.$this->url(array('controller'=>'admin', 'action'=>'settings')).'">Paramètres</a>'; ?></li>
+            <li><?php echo '<a id="stats" href="'.$this->url(array('controller'=>'admin', 'action'=>'stats')).'">Statistiques</a>'; ?></li>
+        </ul>
+    </div>
+    <div id="dashboard_left">
+        <div id="last_articles" class="container">
+            <h2>Derniers articles</h2>
+            <div class="page_navigation"></div>
+            <div class="clear"></div>
+            <div class="left_div_content">
+                <ul class="ul_content">
+                    <?php foreach($this->articles as $articles) { ?>
+                        <li>
+                            <span class="date"><?php echo date("j/m/y", strtotime($articles->article_date)) ?></span>
+                            <span class="titre">
+                                <?php echo '<a href="' .
+                                $this->url(array('post' => $articles->article_id),'edit-article',true) . '">' .
+                                $this->substr($articles->article_title, 22, 2). '</a>' ?>
+                            </span>
+                            <span class="auteur">
+                                <?php echo '<a href="' . $this->url(array('controller'=>'admin', 'action'=>'edit-article', 'author'=>$articles->article_author)) . '">';
+                                echo $articles->user_username;
+                                echo '</a>' ?>
+                            </span>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
+        <div id="last_comments" class="container">
+            <h2>Derniers commentaires</h2>
+            <div class="com_page_navigation"></div>
+            <div class="clear"></div>
+            <div class="left_div_content">
+                <ul class="ul_content">
+                    <?php foreach($this->comments as $comment) { ?>
+                       <li>
+                            <span class="date"><?php echo date("j/m/y", strtotime($comment->comment_date)) ?></span>
+                            <span class="titre">
+                                <?php echo '<a href="' .
+                                $this->url(array('comment' => $comment->comment_id),'admin-comments',true) . '">' .
+                                substr($comment->comment_content,0, 22). '</a>' ?>
+                            </span>
+                            <span class="auteur">
+                                <?php echo '<a href="' . $this->url(array('controller'=>'admin', 'action'=>'edit-article', 'author'=>$articles->article_author)) . '">';
+                                echo $comment->comment_author;
+                                echo '</a>' ?>
+                            </span>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
+        <div id="last_tags" class="container">
+            <h2>Mots Clés</h2>
+            <div class="alt_page_navigation"></div>
+            <div class="clear"></div>
+            <div class="left_div_content">
+                <ul class="ul_content">
+                    <?php foreach($this->tags as $tag) { ?>
+                        <li>
+                            <?php echo '<a href="' . $this->url(array('controller'=>'admin', 'action'=>'tags', 'tag'=>$tag->meta_id)) . '">';
+                                echo $this->escape($tag->meta_name);
+                                echo '</a>' ?>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="dashboard_center">
+        <div id="post_it">
+            <div id="post_it_top"><a class="ajouter_note" href="#"><img src="<?php echo $this->baseUrl() ?>/images/add.png" alt="Ajouter"/></a></div>
+            <?php echo '<ul id="'.$this->status->user_id.'">'; ?>
+                <?php foreach($this->notes as $note) {
+                    echo '<li>';
+                            echo '<span class="note_content" id="'.$note->note_id.'">'.$note->note_content.'</span>';
+                            echo '<span class="delete_note">
+                                    <a href="#">
+                                    <img src="'.$this->baseUrl() .'/images/delete.png" alt="Ajouter"/></a>
+                                </span>';
+                    echo '</li>';
+                    }
+            echo '</ul>';
+            ?>
+            <div id="post_it_bottom"></div>
+        </div>
+        <div id="liens">
+            <div class="titre_bg_gris" id="titre_liens"><h2>Liens</h2><a class="ajouter_lien" href="#"><img src="<?php echo $this->baseUrl() ?>/images/add.png" alt="Ajouter"/></a><div class="clear"></div></div>
+            <ul>
+                <?php foreach($this->links as $link) {
+                    echo '<li id="'.$link->link_id.'-'.$link->link_order.'">';
+                            echo '<span class="url"><a href="'.$link->link_url.'">';
+                            echo $link->link_name;
+                            echo '</a></span>';
+                            echo '<span class="lien_ordre">'.$link->link_order.'</span>';
+                    echo '</li>';
+                } ?>
+            </ul>
+        </div>
+    </div>
+    <div id="dashboard_right">
+        <div id="stats_box">
+            <h2>Statistiques d'accès</h2>
+            <span class="more">
+                <?php echo '<a href="' . $this->url(array('controller'=>'admin', 'action'=>'stats')) . '">';
+                    echo 'voir plus';
+                    echo '</a>' ?>
+            </span>
+            <div id="stats_content">
+                <?php echo $this->Ga(); ?>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>

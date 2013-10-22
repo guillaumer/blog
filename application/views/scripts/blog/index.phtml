@@ -1,0 +1,105 @@
+<?php
+
+//Vue principal du blog
+// Affiche les articles
+
+$this->title = 'En cours d\'assemblage';
+$this->headTitle($this->title);
+$this->inlineScript()->appendFile($this->baseUrl().'/js/disqus_comment.js', $type = 'text/javascript');
+
+if($this->articles)
+{
+?>
+<section>
+    <?php
+        foreach($this->articles as $article) : 
+    ?>
+    <article>
+         <p class="article_date">
+                    <?php
+                        echo strftime("%d", strtotime($article->article_date)).'<br/>';
+                        echo $this->mois(date("m", strtotime($article->article_date)),'court');
+                    ?>
+        </p>
+        <header>
+            <h1>
+                  <?php 
+                        echo '<a href="' .
+                            $this->url(array('post' => $article->article_name),'archives-post'). '">';
+                            if($this->recherche)
+                            {
+                               echo preg_replace("/\b($this->recherche)\b/i", '<span style="background:yellow">\1</span>', $this->escape($article->article_title)); 
+                            } else {
+                                echo $this->escape($article->article_title);
+                            }
+                        echo '</a>';
+                    ?>
+            </h1>
+        </header>
+        <section class="article_content">
+                <?php
+                    if($this->recherche)
+                    {
+                        echo preg_replace("/\b($this->recherche)\b/i", '<span style="background:yellow">\1</span>', $article->article_extract); 
+                    } else {
+                        echo $article->article_extract;
+                    }
+                    echo '<a class="read_more" href="'.
+                                $this->url(array('post' => $article->article_name),'archives-post').'">Continuer la lecture</a>';
+                ?>
+        </section>
+        <section class="article_infos">
+            <p class="metas">
+                Mots-Clés :
+                <?php
+                    $count_objects = count($article->article_meta);
+                    $current_object = 1;
+                    if ($count_objects > 0) : 
+                                foreach($article->article_meta as $meta) :
+                                    echo '<a href="' . $this->url(array('tag' => $meta->meta_name),'archives-tags',true) . '">';
+                                    if($this->recherche)
+                                    {
+                                        echo preg_replace("/\b($this->recherche)\b/i", '<span style="background:yellow">\1</span>', $this->escape($meta->meta_name)); 
+                                    } else {
+                                        echo $this->escape($meta->meta_name);
+                                    }
+                                    if ($current_object == $count_objects) :
+                                        echo '</a>';
+                                    else :
+                                        echo '</a> - ';
+                                    endif;
+                                    $current_object++;
+                                endforeach;
+                endif; ?>
+            </p> | 
+            <p class="commentaires">
+                        <?php
+                                echo '<a href="'.
+                                $this->url(array('post' => $article->article_name),'archives-post').'#disqus_thread" data-disqus-identifier="'.
+                                $article->article_name.'"></a>';
+                        ?>
+            </p>
+        </section>
+    </article>
+    <?php
+        endforeach;
+    ?>
+</section>
+<?php 
+echo $this->paginationControl($this->articles,
+                                    'Sliding',
+                                    '/blog/pagination_index.phtml'
+); ?>
+<?php
+    echo $this->inlineScript();
+} else {
+?>
+	<section>
+		<article>
+			<header>
+			Aucun résultat pour votre recherche.
+			</header>
+		</article>
+	</section>
+<?php
+}

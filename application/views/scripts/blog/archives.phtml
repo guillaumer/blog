@@ -1,0 +1,73 @@
+<?php
+
+//Vue des archives
+if (isset($this->erreur)) {
+    echo '<h3>' , $this->erreur , '</h3>';
+} else {
+            $article = $this->article;
+            $this->title = $this->escape($this->article->article_title);
+            $this->headTitle($this->title);
+            //$this->headLink()->prependStylesheet($this->baseUrl().'/css/SyntaxHighlighter.css');
+            $this->headLink()->prependStylesheet($this->baseUrl().'/css/prettify.css');
+            $this->inlineScript()->appendFile($this->baseUrl().'/js/disqus_comment.js', $type = 'text/javascript');
+            $this->inlineScript()->appendFile($this->baseUrl().'/js/prettify.js', $type = 'text/javascript');
+            $this->inlineScript()->appendFile($this->baseUrl().'/js/lang-php.js', $type = 'text/javascript');
+?>
+        <script>$(function () { window.prettyPrint && prettyPrint() })</script>
+        <section>
+            <article>
+                 <p class="article_date">
+                        <?php
+                            echo strftime("%d", strtotime($article->article_date)).'<br/>';
+                            echo $this->mois(date("m", strtotime($article->article_date)),'court');
+                        ?>
+                </p>
+                <header>
+                    <h1>
+                          <?php 
+                                echo $this->escape($article->article_title);
+                            ?>
+                    </h1>
+                </header>
+                <section class="article_content">
+                        <?php
+                            echo $article->article_extract;
+                            echo $article->article_content;
+                        ?>
+                </section>
+                <section class="article_infos">
+                    <p class="metas">
+                        Mots-Clés :
+                        <?php
+                            $count_objects = count($article->article_meta);
+                            $current_object = 1;
+                            if ($count_objects > 0) : 
+                                        foreach($article->article_meta as $meta) :
+                                            echo '<a href="' . $this->url(array('tag' => $meta->meta_name),'archives-tags',true) . '">';
+                                            echo $this->escape($meta->meta_name);
+                                            if ($current_object == $count_objects) :
+                                                echo '</a>';
+                                            else :
+                                                echo '</a> - ';
+                                            endif;
+                                            $current_object++;
+                                        endforeach;
+                        endif; ?>
+                    </p> | 
+                <p class="commentaires">
+                            <?php
+                                    echo '<a href="'.
+                                    $this->url(array('post' => $article->article_name),'archives-post').'#disqus_thread" data-disqus-identifier="'.
+                                    $article->article_name.'"></a>';
+                            ?>
+                </p>
+                <p id="social">
+                    <?php $this->Social(); ?>
+                </p>
+                </section>
+                <?php echo $this->Disqus('liandriexample', $article->article_name); ?>
+            </article>
+        </section>
+    <?php
+}
+?>

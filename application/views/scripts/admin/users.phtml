@@ -1,0 +1,103 @@
+<?php
+
+/**
+ * Display and edit users
+ *
+ * @author g.raoult@gmail.com
+ */
+
+    $this->title = 'Administration - Utilisateurs';
+    $this->headTitle($this->title);
+    $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery.confirm/jquery.confirm.css');
+    $this->inlineScript()->appendFile($this->baseUrl().'/js/jquery.confirm/jquery.confirm.js', $type = 'text/javascript');
+    echo $this->inlineScript();
+?>
+
+<div id="dashboard_content">
+    <?php
+        if($this->message != '') echo '<p>',$this->message,'</p>';
+        echo '<h2 class="titre_form_article"><img src="'.$this->baseUrl().'/images/titre_gerer_utilisateurs.png" alt="Gérer les utilisateurs"/></h2>';
+    ?>
+    <p id="recap_users">
+            Il y a <span class="vert_g"><?php echo count($this->users) ?></span> utilisateurs inscrits
+    </p>
+    <div id="user_select_list">
+    <?php
+        foreach($this->users as $user) :
+            if($user->user_picture == '') $user->user_picture = $this->BaseUrl().'/images/user_icon.png';
+    ?>
+    <?php
+        if($user->user_id == $this->active_user) {
+            ?>
+                <div class="user_box user_active">
+            <?php
+        } else {
+            ?>
+               <div class="user_box">
+            <?php
+        }
+    ?>
+        <img src="<?php echo $user->user_picture?>" alt="<?php echo $user->user_username ?>" />
+        <p class="user_info">
+            <span class="user_username"><?php echo $user->user_username; ?></span>
+            <span class="user_status"><?php echo $user->status_name; ?></span>
+        </p>
+        <span class="user_id"><?php echo $user->user_id; ?></span>
+    </div>
+    <?php
+        endforeach;
+    ?>
+    </div>
+    <div id="user_edit_infos">
+        <div class="params">
+            <h2 class="titre_sidebar">
+                Groupes
+            </h2>
+            <div id="param_general">
+                <?php
+                 foreach($this->groups as $group => $user){
+                        $status[$user->status_name.'_'.$user->status_id][] = $user->user_username;
+                 }
+                 ?>
+                <ul id="group_list">
+                    <?php
+                        foreach($status as $nom_stat => $us){
+                            $group = explode('_', $nom_stat);
+                            echo '<li><span id="',$group[1],'" class="nom_groupe">',$group[0],'</span><span class="nb_user_in_group"> (',count($us),')</span>';
+                            ?>
+                            <a href="#" class="lien_modif"><img alt="Modifier" src="<?php echo $this->BaseUrl(),'/images/icon_pen.png' ?>"></a>
+                            <?php
+                            if($nom_stat != '') {
+                                echo '<ul>';
+                                foreach($us as $id){
+                                    echo '<li class="user_name">',$id,'</li>';
+                                }
+                                echo '</ul>';
+                            }
+                            echo '</li>';
+                        }
+                    ?>
+                    <!-- groupes vides -->
+                    <?php if(count($this->empty) > 0){ ?>
+                    <li>
+                        <?php
+                          foreach($this->empty as $group){
+                             echo '<span id="',$group->status_id,'" class="nom_groupe">',$group->status_name,'</span><span class="nb_user_in_group"> (0)</span>';
+                             ?>
+                            <a href="#" class="lien_modif"><img alt="Modifier" src="<?php echo $this->BaseUrl(),'/images/icon_pen.png' ?>"></a>
+                            <?php
+                          }
+                        ?>
+                        <ul></ul>
+                    </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+    $this->headScript()->appendFile($this->baseUrl().'/js/jquery.jeditable.min.js', $type = 'text/javascript');
+    $this->headScript()->appendFile($this->baseUrl().'/js/edit_users.js', $type = 'text/javascript');
+    $this->headScript()->appendFile($this->baseUrl().'/js/jquery-ui-1.8.16.custom.min.js', $type = 'text/javascript');
+?>

@@ -1,0 +1,33 @@
+/*============================*/
+/*=== Custom Slider Styles ===*/
+/*============================*/
+#slider {
+    width:618px;
+    height:246px;
+    background:url(images/loading.gif) no-repeat 50% 50%;
+    float:left;
+}
+#slider img {
+	position:absolute;
+	top:0px;
+	left:0px;
+	display:none;
+}
+#slider a {
+	border:0;
+	display:block;
+}
+.control{
+    float:right;
+    width:150px;
+}
+.control a {
+	display:block;
+	border:solid 1px #222;
+	margin-right:3px;
+	float:left;
+        cursor:pointer;
+}
+.control a.active {
+	background:#CCCCCC;
+}

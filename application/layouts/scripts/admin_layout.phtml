@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * Layout for admin interface
+ *
+ * @author g.raoult@gmail.com
+ */
+
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=UTF-8');
+$this->headTitle()->setSeparator(' - ');
+$this->headTitle('');
+$this->headScript()->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js', $type = 'text/javascript');
+echo $this->doctype();
+?>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <?php
+            echo $this->headMeta();
+            echo $this->headTitle();
+            echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/style_admin.css');
+            echo $this->headScript();
+        ?>
+    </head>
+    <body>
+        <div id="top_admin">
+            <div id="top_content">
+                <div id="header_div_haut">
+                    <img id="titre_admin" alt="Panneau d'administration" src="<?php echo $this->baseUrl()?>/images/panneau_admin.png"/>
+                    <div id="top_links">
+                        <ul>
+                            <li id="back_site"><a href="
+                               <?php echo $this->url(array(), 'index') ?>
+                               ">Retour au site</a>
+                            </li>
+                            <li id="logout"><a href="
+                               <?php echo $this->url(array(), 'logout') ?>
+                               ">Déconnexion</a>
+                            </li>
+                            <li class="clear"></li>
+                        </ul>
+                    </div>
+                    <div class="clear"></div>
+                    <div id="user_info">
+                        <?php echo $this->Aduserinfo($this->layout()->status);?>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div id="header_div_bas">
+                    <?php echo $this->Admenu(); ?>
+                </div>
+            </div>
+        </div>
+        <div id="breadcrumbs">
+            <div id="breadcrumbs_content">
+                <?php echo $this->Adbreadcrumbs(); ?>
+            </div>
+        </div>
+        <div id="admin_content">
+            <?php echo $this->layout()->content; ?>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Zend Framework Default Application</title>
+</head>
+<body>
+  <h2 id="erreur"><?php //echo $this->message ?>
+      <span>404 !</span>
+  </h2>
+    <div id="page_not_found">
+        La page que vous recherchez n'existe pas. Vous pouvez :
+    </div>
+    <ul id="not_found_choices">
+        <li>Retourner à l'<a href="<?php echo $this->url(array(), 'index')?>">accueil</a></li>
+        <li>Consulter les <a href="<?php echo $this->url(array(), 'archives')?>">archives</a></li>
+        <li>Me <a href="mailto:guillaume@perpixel.fr">contacter</a> si vous pensez qu'il s'agit d'une erreur</li>
+    </ul>
+
+  <?php if (isset($this->exception)): ?>
+
+  <h3>Exception information:</h3>
+  <p>
+      <b>Message:</b> <?php echo $this->exception->getMessage() ?>
+  </p>
+
+  <h3>Stack trace:</h3>
+  <pre><?php echo $this->exception->getTraceAsString() ?>
+  </pre>
+
+  <h3>Request Parameters:</h3>
+  <pre><?php echo var_export($this->request->getParams(), true) ?>
+  </pre>
+  <?php endif ?>
+
+</body>
+</html>

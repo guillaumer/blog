@@ -1,0 +1,58 @@
+<?php
+
+//Vue des pages
+
+$this->title = 'Perpixel.fr - '.$this->escape($this->page->article_title).'';
+$this->headTitle($this->title);
+
+
+if (isset($this->erreur)) {
+    echo '<h3>' , $this->erreur , '</h3>';
+} else {
+    ?>
+        <section>
+            <article class="accueil_article">
+                <header>
+                    <h2>
+                       <?php 
+                                echo $this->escape($this->page->article_title) ;
+                        ?>
+                    </h2>
+                    <div class="article_infos">
+                        <?php
+                            $count_objects = count($this->page->article_meta);
+                            $current_object = 1;
+                            if ($count_objects > 0) : ?>
+                                <span class="article_metas">
+                                    <img src="<?php echo $this->BaseUrl() ?>../images/tag_icon.png" alt="tags"/>
+                                    <?php
+                                        foreach($this->page->article_meta as $meta) :
+                                            echo '<a href="' . $this->url(array('tag' => $meta->meta_name),'archives-tags',true) . '">';
+                                            echo $this->escape($meta->meta_name);
+                                            if ($current_object == $count_objects) :
+                                                echo '</a>';
+                                            else :
+                                                echo '</a> - ';
+                                            endif;
+                                            $current_object++;
+                                        endforeach;
+                            ?>
+                            <?php endif; ?>
+                            </span>
+                    </div>
+                </header>
+                <section class="article_content">
+                    <p>
+                        <?php
+                            echo $this->page->article_content;
+                        ?>
+                    </p>
+                    <p class="clear">&nbsp;</p>
+                </section>
+            </article>
+        </section>
+    <?php
+}
+echo $this->inlineScript();
+?>
+

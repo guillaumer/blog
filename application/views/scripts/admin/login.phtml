@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * Login view
+ *
+ * @author g.raoult@gmail.com
+ */
+
+    $this->title = 'Perpixel.fr - Administration - Login';
+    $this->headTitle($this->title);
+    $this->headLink()->prependStylesheet($this->baseUrl().'/css/style_admin.css');
+
+?>
+    <section>
+        <article>
+            <header>
+                <h1>Administration</h1>
+            </header>
+            <section class="article_content">
+                <p>
+                <?php echo 'Accès réservé ! Retour à 
+                    <a href="'.
+                    $this->url(array(),'index',true).'
+                    ">l\'accueil</a>.';
+                ?>
+                </p>
+            <section>
+        </article>
+        <section>
+        <?php
+            if($this->erreur != '') echo '<p id="form_error">',$this->erreur,'</p>';
+            echo $this->formLogin;
+        ?>
+        </section>
+    </section>

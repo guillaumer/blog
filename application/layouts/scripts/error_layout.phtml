@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * Error layout
+ *
+ * @author g.raoult@gmail.com
+ */
+
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=UTF-8');
+$this->headMeta()->setName('Description',"En construction");
+$this->headTitle()->setSeparator(' - ');
+$this->headTitle('');
+$this->headScript()->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js', $type = 'text/javascript');
+//echo $this->doctype();
+echo '<!DOCTYPE HTML>';
+?>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <?php
+            echo $this->headMeta();
+            echo $this->headTitle();
+            echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/style.css');
+            echo $this->headScript();
+            $this->inlineScript()->appendFile($this->baseUrl().'/js/blog.js', $type = 'text/javascript');
+        ?>
+        <link href="http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic" rel="stylesheet" type="text/css"/>
+    </head>
+    <?php if($this->page == 'index') { ?>
+            <body class="accueil">
+    <?php } elseif ($this->page == 'archives') { ?>
+            <body class="archives">
+    <?php } else {?>
+            <body class="about">       
+    <?php } ?>
+        <header id="header_blog">
+            <div id="cont_header">
+                <h1><a href="<?php echo $this->url(array(), 'index')?>"><img src="<?php echo $this->BaseUrl()?>/images/blog_titre.png" alt="PerPixel"/></a></h1>
+                    <nav>
+                        <?php 
+                            $this->navigation()->findOneByLabel('CV')->setVisible(false);
+                            echo $this->navigation()->menu(); 
+                        ?>
+                    </nav>
+            </div>
+        </header>
+        <div id="main_content">
+            <div id="col_content_left" class="col_error">
+                    <?php echo $this->layout()->content; ?>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <footer>
+            <?php
+                $this->Footer();
+            ?>
+        </footer>
+        <div class="clear"></div>
+        <div id="credits">
+            <div id="cont_credits">
+                <span id="copyright">
+                    <a href="<?php echo $this->url(array(), 'admin') ?>">Administration</a> - <a href="<?php echo $this->url(array(), 'admin') ?>">Plan du site</a> - <a href="mailto:contact@nding.fr">Contact</a>
+                </span>
+                <span id="techs">Propulsé par <a href="http://framework.zend.com/" title="Zend Framework"><img src="<?php echo $this->BaseUrl() ?>/images/zend_logo.png" alt="Zend Framework"/></a>
+                    &amp; <a href="http://jquery.com/" title="JQuery"><img src="<?php echo $this->BaseUrl() ?>/images/jquery_logo.png" alt="JQuery"/></a></span>
+            </div>
+        </div>
+        <?php 
+            echo $this->inlineScript();
+        ?>
+        <script type="text/javascript">
+
+              var _gaq = _gaq || [];
+              _gaq.push(['_setAccount', 'UA-21689372-1']);
+              _gaq.push(['_setDomainName', '.nding.fr']);
+              _gaq.push(['_trackPageview']);
+
+              (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+              })();
+
+            </script>
+    </body>
+</html>

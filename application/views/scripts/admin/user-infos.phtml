@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * Partial render for user infos
+ *
+ * @author g.raoult@gmail.com
+ */
+
+$user = $this->data;
+$articles = $this->articles_auteur;
+?>
+
+<h2 class="titre_sidebar">
+    <?php echo $user->user_username; ?>
+    <img id="affichage_precedent" src="<?php echo $this->BaseUrl().'/images/arrow_return_icon.png' ?>" alt="Revenir"/>
+</h2>
+<div id="param_general">
+    <img id="user_picture" alt="<?php echo $user->user_username ?>" src="<?php if($user->user_picture == '') $user->user_picture = $this->BaseUrl().'/images/user_icon.png'; echo $user->user_picture ?>"/>
+    <p id="user_data_autres">
+        <span>Adresse email : <?php echo $user->user_email ?></span>
+        <span>Date de création : <?php echo $user->user_registered ?></span>
+        <span>Groupe : <?php echo $user->status_name ?></span>
+    </p>    
+    <p class="clear"></p>
+    <h3>Derniers articles :</h3>
+    <?php if(count($articles) > 0) { ?>
+    <ul id="derniers_articles_auteur">
+    <?php
+        foreach($articles as $a) :
+            echo '
+            <li><a href="',$this->url(array('post' => $a->article_id),'edit-article',true),'">',$a->article_title,'</a></li>';
+        endforeach;
+    ?>
+     </ul>
+    <?php } else { ?>
+    <span class="aucun_a">Aucun article</span>
+    <?php } ?>
+</div>

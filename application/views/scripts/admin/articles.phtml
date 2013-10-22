@@ -1,0 +1,99 @@
+<?php
+
+/**
+ * Display posts in admin
+ *
+ * @author g.raoult@gmail.com
+ */
+
+    $this->title = 'Administration - Modifier un article';
+    $this->headTitle($this->title);
+    $this->headLink()->prependStylesheet($this->baseUrl().'/js/jquery.confirm/jquery.confirm.css');
+    $this->inlineScript()->prependFile($this->baseUrl().'/js/jquery.confirm/jquery.confirm.js', $type = 'text/javascript');
+    $this->inlineScript()->prependFile($this->baseUrl().'/js/admin_articles.js', $type = 'text/javascript');
+    echo $this->inlineScript();
+?>
+
+<div id="dashboard_content">
+    <?php
+        echo '<h2 class="titre_form_article"><img src="'.$this->baseUrl().'/images/titre_gerer_articles.png" alt="Gérer les articles"/></h2>';
+    ?>
+    <div id="select_type">
+        <ul>
+            <li><a href="<?php echo $this->url(array('controller'=>'admin', 'action'=>'articles', 'type'=>'tous'),false,true)?>"  <?php if($this->type == 'tous') echo 'class="active"' ?>>Tous</a></li>
+            <li><a href="<?php echo $this->url(array('controller'=>'admin', 'action'=>'articles', 'type'=>'articles'),false,true)?>" <?php if($this->type == 'articles') echo 'class="active"' ?>>Articles</a></li>
+            <li><a href="<?php echo $this->url(array('controller'=>'admin', 'action'=>'articles', 'type'=>'pages'),false,true)?>" <?php if($this->type == 'pages') echo 'class="active"' ?>>Pages</a></li>
+        </ul>
+    </div>
+<?php
+    if( isset($this->flashMessages) && !empty($this->flashMessages) ){ ?>
+        <ul id="messages">
+            <?php foreach( $this->flashMessages as $message ){?>
+                <li>
+                    <?php echo $message;?>
+                </li>
+            <?php } ?>
+        </ul>
+    <?php }
+    ?>
+        <div id="articles_exist">
+                <ul>
+            <?php
+                foreach ($this->articles as $article) :
+            ?>
+                    <li class="article_<?php echo $article->article_id ?>">
+                            <p class="status">
+                                <?php
+                                     if ($article->article_status == 1){
+                                        echo '<img src="'.$this->baseUrl().'/images/icon_published.png" alt="Publié"/>';
+                                    } else{
+                                        echo '<img src="'.$this->baseUrl().'/images/icon_not_published.png" alt="Non publié"/>';
+                                    }
+                                ?>
+                            </p>
+                            <p>
+                                <span>
+                                    <?php
+                                        echo $this->substr($article->article_title, 50, 2);
+                                    ?>
+                                </span>
+                                <span class="mc">
+                                    <?php
+                                        $count_objects = count($article->article_meta);
+                                        $current_object = 1;
+                                        if ($count_objects > 1) {
+                                                echo  'Mots clé : ';
+                                        } else {
+                                                echo  'Mot clé : ';
+                                        }
+                                        if ($count_objects != 0) {
+                                            foreach ($article->article_meta as $meta) :
+                                                echo '
+                                                <a href="' . $this->url(array('controller'=>'admin', 'action'=>'edit-article', 'meta'=>$meta->meta_id),false,true).'">'
+                                                .$meta->meta_name;
+                                                if ($current_object == $count_objects) :
+                                                    echo '</a>';
+                                                else :
+                                                    echo '</a> - ';
+                                                endif;
+                                                $current_object++;
+                                            endforeach;
+                                        } else {
+                                            echo 'Aucun';
+                                        }
+                                    ?>
+                                </span>
+                            </p>
+                    </li>
+                <?php
+                    endforeach;
+                ?>
+                </ul>
+        </div>
+        <div id="globals_params">
+                <?php /*echo '<a href="' . $this->url(array(),'new-article',true).'">
+                     -> Ecrire un nouvel article
+                </a>'; */
+                ?>
+        </div>
+</div>

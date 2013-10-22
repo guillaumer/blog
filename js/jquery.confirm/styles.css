@@ -1,0 +1,13 @@
+body{
+	color:#FCFCFC;
+	background:url('./bg_vertical') repeat-x;
+	font:15px Calibri,Arial,sans-serif;
+	border:1px solid transparent;
+	width:99.9%;
+}
+
+#page{
+	width:660px;
+	margin:140px auto 60px;
+}
+

@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * Affiche les liens de pagination
+ *
+ * @author guillaume
+ * @see Layout
+ */
+
+//Pagination de la page d'index
+($this->layout()->view == 'index') ? $url = 'page' : $url = null;
+if($this->current != $this->first || $this->current != $this->last)
+{
+    echo '<div id="pagination">';
+}
+
+if($this->current != $this->first)
+{
+        echo '<span class="page_precedente">
+            <a href="'.$this->url(array('page' => ($this->current-1)),$url).
+            '">< Articles précédents</a>';
+        echo '</span>';
+}
+
+if($this->current != $this->first && $this->current != $this->last)
+{
+    echo ' | ';
+}
+
+if($this->current != $this->last)
+{
+        echo '<span class="page_suivante">
+        <a href="'.$this->url(array('page' => ($this->current+1)),$url).
+        '">Articles suivants ></a>';
+        echo '</span>';
+}
+
+if($this->current != $this->first || $this->current != $this->last)
+{
+    echo '</div>';
+}
+?>

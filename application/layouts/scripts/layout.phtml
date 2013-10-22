@@ -1,0 +1,103 @@
+<?php
+
+/**
+ * Main layout
+ *
+ * @author g.raoult@gmail.com
+ */
+
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=UTF-8');
+$this->headMeta()->setName('Description',"En construction");
+$this->headTitle()->setSeparator(' - ');
+$this->headTitle('');
+$this->headScript()->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js', $type = 'text/javascript');
+echo '<!DOCTYPE HTML>';
+?>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <?php
+            echo $this->headMeta();
+            echo $this->headTitle();
+            $this->headLink()->appendStylesheet($this->baseUrl().'/css/style.css');
+            $this->headLink()->prependStylesheet($this->baseUrl().'/js/yox/yoxview.css');
+            $this->headLink()->prependStylesheet('http://fonts.googleapis.com/css?family=Arvo');
+            $this->headLink()->prependStylesheet('http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic');
+            $this->headScript()->appendFile('http://html5shim.googlecode.com/svn/trunk/html5.js');
+
+            echo $this->headLink();
+            echo $this->headScript();
+			
+            $this->inlineScript()->appendFile($this->baseUrl().'/js/yox/jquery.yoxview-2.21.min.js', $type = 'text/javascript');
+            $this->inlineScript()->appendFile($this->baseUrl().'/js/blog.js', $type = 'text/javascript');
+            $this->inlineScript()->appendFile($this->baseUrl().'/js/live.js', $type = 'text/javascript');
+        ?>
+        <link rel="alternate" type="application/rss+xml" title="Flux RSS" href="<?php echo $this->url(array(),'rss', true) ?>" />
+    </head>
+    <body>
+        <header id="header_blog">
+			<nav>
+                    <?php 
+                    echo $this->navigation()->menu()->setMaxDepth(0);
+                    ?>
+            </nav>
+        </header>
+        <div id="header_illustration"></div>
+        <div id="main_content">
+            <div id="col_content_left">
+                    <p id="breadcrumbs">
+                        <a href="<?php echo $this->url(array(),'index', true) ?>">Dernier articles</a>
+                        <?php
+                            if (isset($this->layout()->annee)) {
+                                    echo '<a style="text-transform:capitalize" href="'.
+                                    $this->url(array(
+                                        'year' => $this->layout()->annee, 
+                                        'month' => $this->layout()->mois
+                                    ),'archives-date',true).'">'.
+                                    utf8_encode(strftime("%B", strtotime($this->layout()->mois.'/28/12'))).' '.
+                                    $this->layout()->annee.
+                                    '</a>';     
+                            }
+                            if(isset($this->layout()->tag)) {
+                                echo '<span>Mot-Clé '.$this->layout()->tag.'</span>';
+                            }
+                            if(isset($this->layout()->author)) {
+                                echo '<span>Auteur '.$this->layout()->author.'</span>';
+                            }
+                            if(isset($this->layout()->recherche)) {
+                                echo '<span>Recherche "'.
+                                        $this->layout()->recherche.
+                                        '" : '.$this->layout()->nb_res;
+                                        echo ($this->layout()->nb_res == 1) ? ' résultat' : ' résultats'; 
+                                        echo '</span>';
+                            }
+                            if(isset($this->layout()->page_en_cours)) {
+                                if($this->layout()->page_en_cours != 1)
+                                echo '<span>Page '.$this->layout()->page_en_cours.'</span>';   
+                            }
+                        ?>
+                    </p>
+                    <?php 
+                        echo $this->layout()->content; 
+                    ?>
+                     <footer>
+                        <?php 
+                            echo '
+                            <a href="'.$this->url(array(),'admin',true).'">Administration</a> -
+                            <a href="'.$this->url(array(),'sitemap',true).'">Plan du site</a> -
+                            <a href="'.$this->url(array(),'contact',true).'">Contact</a>'; 
+                        ?>
+                    </footer>
+            </div>
+            <div id="col_sidebar_right">
+                <?php 
+                    echo $this->Sidebar(); 
+                ?>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <?php 
+            echo $this->inlineScript();
+        ?>
+    </body>
+</html>

@@ -1,0 +1,110 @@
+<?php
+
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=UTF-8');
+$this->headMeta()->setName('Description',"En construction");
+$this->headTitle()->setSeparator(' - ');
+$this->headTitle('');
+$this->headScript()->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js', $type = 'text/javascript');
+//echo $this->doctype();
+echo '<!DOCTYPE HTML>';
+?>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <?php
+            echo $this->headMeta();
+            echo $this->headTitle();
+            $this->headLink()->prependStylesheet($this->baseUrl().'/css/style.css');
+            $this->headLink()->prependStylesheet($this->baseUrl().'/js/yox/yoxview.css');
+            echo $this->headLink();
+            echo $this->headScript();
+            $this->inlineScript()->appendFile($this->baseUrl().'/js/yox/jquery.yoxview-2.21.min.js', $type = 'text/javascript');
+            $this->inlineScript()->appendFile($this->baseUrl().'/js/blog.js', $type = 'text/javascript');
+        ?>
+        <link href="http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic" rel="stylesheet" type="text/css"/>
+        <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'/>
+    </head>
+    <body>
+        <header id="header_blog">
+            <div id="cont_header">
+                    <h1>
+                        <a href="<?php echo $this->url(array(), 'index')?>"><img src="<?php echo $this->BaseUrl()?>/images/blog_titre.png" alt="PerPixel"/></a>
+                    </h1>
+                    <nav>
+                        <?php 
+                        $this->navigation()->findOneByLabel('CV')->setVisible(false);
+                        echo $this->navigation()->menu();
+                        ?>
+                    </nav>
+                    <form action="<?php echo $this->url(array(),'recherche')?>" method="post" id="recherche_generale">
+                            <input required placeholder="Recherche (beta)" id="recherche" type="text" name="recherche" />
+                            <input id="recherche_submit" type="submit" value="OK"/>
+                    </form>
+            </div>
+        </header>
+        <div id="main_content">
+            <div id="col_content_left">
+                    <?php echo $this->layout()->content; ?>
+            </div>
+            <div id="col_sidebar_right">
+                <?php
+                    switch($this->page) {
+                        case 'index' :
+                            echo 
+                                    $this->About();
+                                    $this->Twitter();
+                                    $this->FlickR();
+                            break;
+                        case 'archives' :
+                            echo $this->message;
+                            echo 
+                                    $this->Sorting();
+                            break;
+                        case 'recherche' :
+                            echo $this->message;
+                            echo 
+                                    $this->Sorting();
+                            break;
+                        case 'pages' :
+                            echo 
+                                    $this->Sorting();
+                            break;
+                        default :
+                            echo '';
+                            break;
+                    }
+                    ?>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div id="footer_top"></div>
+        <footer>
+            <?php
+                $this->Footer();
+            ?>
+        </footer>
+        <div id="credits">
+            <div id="cont_credits">
+                <span id="copyright">
+                    <a href="<?php echo $this->url(array(), 'admin') ?>">Administration</a> - <a href="<?php echo $this->url(array(), 'sitemap') ?>">Plan du site</a> - <a href="mailto:guillaume@perpixel.fr">Contact</a>
+                </span>
+                <span id="techs">Pixellisé à la main sous <a href="http://framework.zend.com/" title="Zend Framework"><img src="<?php echo $this->BaseUrl() ?>/images/zend_logo.png" alt="Zend Framework"/></a>
+                    </span>
+            </div>
+        </div>
+        <?php 
+            echo $this->inlineScript();
+        ?>
+        <script type="text/javascript">
+              var _gaq = _gaq || [];
+                  _gaq.push(['_setAccount', 'UA-21689372-1']);
+                  _gaq.push(['_trackPageview']);
+
+                  (function() {
+                    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                  })();
+            </script>
+    </body>
+</html>
